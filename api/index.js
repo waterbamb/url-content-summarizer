@@ -35,16 +35,17 @@ async function chargeUser(userId) {
 
 // Fetch and parse webpage
 async function fetchContent(url) {
-  const response = await axios.get(url, {
+  // In Vercel/serverless, use http instead of https for better compatibility
+  const targetUrl = url.replace(/^https:/, 'http:');
+  
+  const response = await axios.get(targetUrl, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (compatible; URLSummarizer/1.0; Vercel)',
       'Accept': 'text/html,application/xhtml+xml',
     },
     timeout: 15000,
     maxRedirects: 5,
-    httpsAgent: new (require('https').Agent)({
-      rejectUnauthorized: false
-    })
+    httpAgent: new (require('http').Agent)({ keepAlive: true })
   });
   
   return response.data;
