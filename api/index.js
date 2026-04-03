@@ -37,11 +37,14 @@ async function chargeUser(userId) {
 async function fetchContent(url) {
   const response = await axios.get(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; URLSummarizer/1.0)',
+      'User-Agent': 'Mozilla/5.0 (compatible; URLSummarizer/1.0; Vercel)',
       'Accept': 'text/html,application/xhtml+xml',
     },
     timeout: 15000,
-    maxRedirects: 5
+    maxRedirects: 5,
+    httpsAgent: new (require('https').Agent)({
+      rejectUnauthorized: false
+    })
   });
   
   return response.data;
